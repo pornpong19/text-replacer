@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Text Replacer
+Name[th]=Text Replacer
+Comment=Desktop app for text file word replacement
+Comment[th]=แอพแก้ไขคำในไฟล์ข้อความ
+Exec=/mnt/d/Vibe Code/text_replacer VS code/text-replacer/start.sh
+Icon=/mnt/d/Vibe Code/text_replacer VS code/text-replacer/assets/icon.png
+Terminal=false
+Type=Application
+Categories=Utility;TextEditor;
+StartupNotify=true
+Path=/mnt/d/Vibe Code/text_replacer VS code/text-replacer

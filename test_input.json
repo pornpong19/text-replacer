@@ -1,0 +1,8 @@
+{
+  "files": ["/mnt/d/Vibe Code/text_replacer VS code/text-replacer/test_new_ui.txt"],
+  "replacements": {
+    "เบาๆ": "เบาเบา",
+    "ใหญ่ๆ": "ใหญ่โต",
+    "เร็วๆ": ""
+  }
+}

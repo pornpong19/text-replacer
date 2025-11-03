@@ -1,0 +1,30 @@
+วิธีเปิดโปรแกรมแบบ Manual
+
+1. กด Windows + R
+2. พิมพ์ cmd แล้วกด Enter
+3. คัดลอกคำสั่งนี้และวางใน Command Prompt:
+
+cd /d "D:\Vibe Code\text_replacer VS code\text-replacer"
+
+4. กด Enter แล้วรอให้เข้าโฟลเดอร์
+
+5. พิมพ์คำสั่งนี้:
+
+npm start
+
+6. กด Enter
+
+---
+
+หากขึ้น error ว่า "npm is not recognized" แสดงว่าต้องติดตั้ง Node.js ก่อน:
+- ไปที่ https://nodejs.org
+- ดาวน์โหลดเวอร์ชั่น LTS
+- ติดตั้งแล้ว restart คอมพิวเตอร์
+- ลองใหม่
+
+หากขึ้น error ว่า "python is not recognized" แสดงว่าต้องติดตั้ง Python ก่อน:
+- ไปที่ https://python.org
+- ดาวน์โหลด Python 3.x
+- ติดตั้งแล้วเลือก "Add to PATH"
+- restart คอมพิวเตอร์
+- ลองใหม่

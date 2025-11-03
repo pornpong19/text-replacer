@@ -1,0 +1,49 @@
+{
+  "name": "text-replacer",
+  "version": "1.0.0",
+  "description": "Desktop app for text file word replacement",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "package": "electron-packager . \"Text Replacer\" --platform=win32 --arch=x64 --out=dist --overwrite --ignore=\"node_modules/(electron-builder|electron-packager)\" --ignore=\"dist\""
+  },
+  "keywords": [
+    "electron",
+    "text",
+    "replacement",
+    "desktop"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "child_process": "^1.0.2"
+  },
+  "build": {
+    "appId": "com.textreplacer.app",
+    "productName": "Text Replacer",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "backend/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "dir"
+    },
+    "nsis": {
+      "oneClick": false
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    }
+  }
+}
