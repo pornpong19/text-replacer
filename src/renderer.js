@@ -129,6 +129,24 @@ class TextReplacerApp {
         document.getElementById('textDeleteProfileBtn').addEventListener('click', () => {
             this.deleteProfile();
         });
+
+        // Export/Import preset controls - File mode
+        document.getElementById('exportPresetBtn').addEventListener('click', () => {
+            this.exportPresets();
+        });
+
+        document.getElementById('importPresetBtn').addEventListener('click', () => {
+            this.importPresets();
+        });
+
+        // Export/Import preset controls - Text mode
+        document.getElementById('textExportPresetBtn').addEventListener('click', () => {
+            this.exportPresets();
+        });
+
+        document.getElementById('textImportPresetBtn').addEventListener('click', () => {
+            this.importPresets();
+        });
     }
 
     async selectFiles() {
@@ -996,6 +1014,127 @@ class TextReplacerApp {
             btn.innerHTML = originalText;
             btn.style.background = '';
         }, 2000);
+    }
+
+    // Export presets to file
+    async exportPresets() {
+        try {
+            // Save current profile before exporting
+            this.saveCurrentProfile();
+
+            // Get file path from save dialog
+            const filePath = await window.electronAPI.savePresetDialog();
+
+            if (!filePath) {
+                return; // User cancelled
+            }
+
+            // Prepare export data
+            const exportData = {
+                version: '2.0',
+                exportDate: new Date().toISOString(),
+                profiles: this.profiles,
+                currentProfile: this.currentProfile
+            };
+
+            // Write to file
+            const result = await window.electronAPI.writePresetFile(
+                filePath,
+                JSON.stringify(exportData, null, 2)
+            );
+
+            if (result.success) {
+                alert('ส่งออก Preset สำเร็จ!');
+            } else {
+                alert('เกิดข้อผิดพลาดในการส่งออก: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Error exporting presets:', error);
+            alert('เกิดข้อผิดพลาดในการส่งออก: ' + error.message);
+        }
+    }
+
+    // Import presets from file
+    async importPresets() {
+        try {
+            // Get file path from open dialog
+            const filePath = await window.electronAPI.openPresetDialog();
+
+            if (!filePath) {
+                return; // User cancelled
+            }
+
+            // Read file content
+            const result = await window.electronAPI.readPresetFile(filePath);
+
+            if (!result.success) {
+                alert('เกิดข้อผิดพลาดในการอ่านไฟล์: ' + result.error);
+                return;
+            }
+
+            // Parse JSON
+            let importData;
+            try {
+                importData = JSON.parse(result.content);
+            } catch (error) {
+                alert('ไฟล์ไม่ถูกต้อง: ไม่สามารถอ่าน JSON ได้');
+                return;
+            }
+
+            // Validate import data
+            if (!importData.profiles || typeof importData.profiles !== 'object') {
+                alert('ไฟล์ไม่ถูกต้อง: ไม่พบข้อมูล profiles');
+                return;
+            }
+
+            // Ask user for import mode
+            const importMode = confirm(
+                'คุณต้องการรวม Preset เข้ากับที่มีอยู่ (OK) หรือแทนที่ทั้งหมด (Cancel)?'
+            );
+
+            if (importMode) {
+                // Merge mode
+                Object.keys(importData.profiles).forEach(profileName => {
+                    if (this.profiles[profileName]) {
+                        // Profile already exists, ask to overwrite
+                        const overwrite = confirm(
+                            `โปรไฟล์ "${profileName}" มีอยู่แล้ว คุณต้องการแทนที่หรือไม่?`
+                        );
+                        if (overwrite) {
+                            this.profiles[profileName] = importData.profiles[profileName];
+                        }
+                    } else {
+                        // New profile, just add it
+                        this.profiles[profileName] = importData.profiles[profileName];
+                    }
+                });
+            } else {
+                // Replace mode
+                const confirmReplace = confirm(
+                    'คุณแน่ใจหรือไม่ว่าต้องการลบ Preset ทั้งหมดและแทนที่ด้วยไฟล์ที่นำเข้า?'
+                );
+                if (!confirmReplace) {
+                    return;
+                }
+                this.profiles = importData.profiles;
+                this.currentProfile = importData.currentProfile || 'default';
+
+                // Ensure default profile exists
+                if (!this.profiles['default']) {
+                    this.profiles['default'] = [];
+                }
+            }
+
+            // Update UI
+            this.updateProfileButtons();
+            this.loadCurrentProfile();
+            this.saveSettings();
+
+            alert('นำเข้า Preset สำเร็จ!');
+        } catch (error) {
+            console.error('Error importing presets:', error);
+            alert('เกิดข้อผิดพลาดในการนำเข้า: ' + error.message);
+        }
     }
 
 }

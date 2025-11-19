@@ -173,3 +173,51 @@ ipcMain.handle('get-file-paths', async (event, fileItems) => {
     }
     return paths;
 });
+
+// Handle save preset dialog
+ipcMain.handle('save-preset-dialog', async () => {
+    const result = await dialog.showSaveDialog(mainWindow, {
+        title: 'บันทึก Preset',
+        defaultPath: 'text-replacer-presets.json',
+        filters: [
+            { name: 'JSON Files', extensions: ['json'] },
+            { name: 'All Files', extensions: ['*'] }
+        ]
+    });
+
+    return result.filePath;
+});
+
+// Handle open preset dialog
+ipcMain.handle('open-preset-dialog', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+        title: 'เปิด Preset',
+        properties: ['openFile'],
+        filters: [
+            { name: 'JSON Files', extensions: ['json'] },
+            { name: 'All Files', extensions: ['*'] }
+        ]
+    });
+
+    return result.filePaths[0];
+});
+
+// Handle write preset file
+ipcMain.handle('write-preset-file', async (event, filePath, content) => {
+    try {
+        await fs.writeFile(filePath, content, { encoding: 'utf8' });
+        return { success: true };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+});
+
+// Handle read preset file
+ipcMain.handle('read-preset-file', async (event, filePath) => {
+    try {
+        const content = await fs.readFile(filePath, { encoding: 'utf8' });
+        return { success: true, content };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+});
