@@ -18,7 +18,7 @@ class TextReplacer:
         """Set all replacement rules at once"""
         self.replacements = replacements_dict
     
-    def process_file(self, file_path):
+    def process_file(self, file_path, overwrite_original=False):
         """Process a single text file with replacements"""
         try:
             # First, read file as binary to examine raw bytes
@@ -95,24 +95,29 @@ class TextReplacer:
                         'operation': operation_type
                     })
             
-            # Create output folder and save edited file with original name
             path_obj = Path(file_path)
-            output_folder = path_obj.parent / "edited_files"
+            
+            if overwrite_original:
+                # Overwrite the original file
+                new_file_path = path_obj
+            else:
+                # Create output folder and save edited file with original name
+                output_folder = path_obj.parent / "edited_files"
 
-            # Create output folder if it doesn't exist
-            output_folder.mkdir(exist_ok=True)
+                # Create output folder if it doesn't exist
+                output_folder.mkdir(exist_ok=True)
 
-            # Use original filename
-            new_file_path = output_folder / path_obj.name
+                # Use original filename
+                new_file_path = output_folder / path_obj.name
 
-            # If file already exists in output folder, add number suffix
-            counter = 1
-            while new_file_path.exists():
-                new_file_name = f"{path_obj.stem}_{counter}{path_obj.suffix}"
-                new_file_path = output_folder / new_file_name
-                counter += 1
+                # If file already exists in output folder, add number suffix
+                counter = 1
+                while new_file_path.exists():
+                    new_file_name = f"{path_obj.stem}_{counter}{path_obj.suffix}"
+                    new_file_path = output_folder / new_file_name
+                    counter += 1
 
-            # Write to new file with UTF-8 encoding
+            # Write to file with UTF-8 encoding
             write_encoding = 'utf-8'
             with open(new_file_path, 'w', encoding=write_encoding) as file:
                 file.write(modified_content)
@@ -121,6 +126,7 @@ class TextReplacer:
                 'success': True,
                 'file': str(file_path),
                 'new_file': str(new_file_path),
+                'overwritten': overwrite_original,
                 'replacements': replacements_made,
                 'encoding_used': used_encoding,
                 'encoding_written': write_encoding
@@ -133,12 +139,12 @@ class TextReplacer:
                 'error': str(e)
             }
     
-    def process_files(self, file_paths):
+    def process_files(self, file_paths, overwrite_original=False):
         """Process multiple text files"""
         results = []
         for file_path in file_paths:
             if os.path.exists(file_path) and file_path.endswith('.txt'):
-                result = self.process_file(file_path)
+                result = self.process_file(file_path, overwrite_original)
                 results.append(result)
             else:
                 results.append({
@@ -165,16 +171,18 @@ def main():
                 data = json.load(f)
                 files = data.get('files', [])
                 replacements = data.get('replacements', {})
+                overwrite_original = data.get('overwrite_original', False)
         else:
             # Handle command line arguments
             files = args.files or []
             replacements = json.loads(args.replacements) if args.replacements else {}
+            overwrite_original = False
         
         # Set replacement rules
         replacer.set_replacements(replacements)
         
         # Process files
-        results = replacer.process_files(files)
+        results = replacer.process_files(files, overwrite_original)
         
         # Output results as JSON
         print(json.dumps({

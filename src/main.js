@@ -89,6 +89,41 @@ ipcMain.handle('select-files', async () => {
     return result.filePaths;
 });
 
+// Handler for selecting multiple folders and reading .txt files from them
+ipcMain.handle('select-folders', async () => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openDirectory', 'multiSelections'],
+        title: 'เลือกโฟลเดอร์ที่มีไฟล์ .txt'
+    });
+
+    if (result.canceled || result.filePaths.length === 0) {
+        return [];
+    }
+
+    const foldersWithFiles = [];
+
+    for (const folderPath of result.filePaths) {
+        try {
+            const files = await fs.readdir(folderPath);
+            const txtFiles = files
+                .filter(file => file.toLowerCase().endsWith('.txt'))
+                .map(file => path.join(folderPath, file));
+
+            if (txtFiles.length > 0) {
+                foldersWithFiles.push({
+                    folderPath: folderPath,
+                    folderName: path.basename(folderPath),
+                    files: txtFiles
+                });
+            }
+        } catch (error) {
+            console.error(`Error reading folder ${folderPath}:`, error);
+        }
+    }
+
+    return foldersWithFiles;
+});
+
 ipcMain.handle('process-files', async (event, data) => {
     try {
         // Create temporary JSON file for Python script with proper encoding

@@ -1,6 +1,7 @@
 class TextReplacerApp {
     constructor() {
         this.selectedFiles = [];
+        this.selectedFolders = [];
         this.currentProfile = 'default';
         this.profiles = {
             'default': []
@@ -13,6 +14,11 @@ class TextReplacerApp {
         // File selection
         document.getElementById('selectFilesBtn').addEventListener('click', () => {
             this.selectFiles();
+        });
+
+        // Folder selection
+        document.getElementById('selectFoldersBtn').addEventListener('click', () => {
+            this.selectFolders();
         });
 
         // Add replacement rules
@@ -153,6 +159,11 @@ class TextReplacerApp {
         try {
             const files = await window.electronAPI.selectFiles();
             this.selectedFiles = files;
+
+            // Clear folder selection when selecting individual files
+            this.selectedFolders = [];
+            document.getElementById('selectedFolders').innerHTML = '';
+
             this.displaySelectedFiles();
             this.updateProcessButton();
         } catch (error) {
@@ -163,7 +174,7 @@ class TextReplacerApp {
 
     displaySelectedFiles() {
         const container = document.getElementById('selectedFiles');
-        
+
         if (this.selectedFiles.length === 0) {
             container.innerHTML = '';
             return;
@@ -180,6 +191,51 @@ class TextReplacerApp {
         `).join('');
 
         container.innerHTML = filesHtml;
+    }
+
+    async selectFolders() {
+        try {
+            const folders = await window.electronAPI.selectFolders();
+            this.selectedFolders = folders;
+
+            // Clear individual file selection when selecting folders
+            this.selectedFiles = [];
+            document.getElementById('selectedFiles').innerHTML = '';
+
+            // Collect all files from all folders
+            const allFiles = [];
+            folders.forEach(folder => {
+                allFiles.push(...folder.files);
+            });
+            this.selectedFiles = allFiles;
+
+            this.displaySelectedFolders();
+            this.updateProcessButton();
+        } catch (error) {
+            console.error('Error selecting folders:', error);
+            this.showError('เกิดข้อผิดพลาดในการเลือกโฟลเดอร์');
+        }
+    }
+
+    displaySelectedFolders() {
+        const container = document.getElementById('selectedFolders');
+
+        if (this.selectedFolders.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+
+        const foldersHtml = this.selectedFolders.map(folder => `
+            <div class="folder-item">
+                <svg class="folder-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span class="folder-name">${folder.folderName}</span>
+                <span class="folder-file-count">(${folder.files.length} ไฟล์)</span>
+            </div>
+        `).join('');
+
+        container.innerHTML = foldersHtml;
     }
 
     addReplaceRow(oldWord = '', newWord = '', shouldSave = true) {
@@ -345,13 +401,17 @@ class TextReplacerApp {
             return;
         }
 
+        // Get overwrite option
+        const overwriteOriginal = document.getElementById('overwriteOriginal').checked;
+
         // Show processing indicator
         this.showProcessing(true);
 
         try {
             const data = {
                 files: this.selectedFiles,
-                replacements: replacements
+                replacements: replacements,
+                overwrite_original: overwriteOriginal
             };
 
             const result = await window.electronAPI.processFiles(data);
@@ -384,7 +444,7 @@ class TextReplacerApp {
     displayResults(result, mode = 'all') {
         const resultsSection = document.getElementById('resultsSection');
         const container = document.getElementById('resultsContainer');
-        
+
         if (!result.success) {
             container.innerHTML = `
                 <div class="result-item error">
@@ -399,7 +459,7 @@ class TextReplacerApp {
         const resultsHtml = result.results.map(fileResult => {
             const isSuccess = fileResult.success;
             const statusClass = isSuccess ? 'success' : 'error';
-            
+
             let detailsHtml = '';
             if (isSuccess) {
                 if (fileResult.replacements.length > 0) {
@@ -414,14 +474,18 @@ class TextReplacerApp {
                     detailsHtml = '<div class="replacement-detail">ไม่พบคำที่ต้องแทนที่หรือลบ</div>';
                 }
 
-                // Add new file information
+                // Add file information
                 if (fileResult.new_file) {
-                    detailsHtml += `<div class="replacement-detail new-file-info">ไฟล์ใหม่: ${fileResult.new_file}</div>`;
+                    if (fileResult.overwritten) {
+                        detailsHtml += `<div class="replacement-detail overwritten-info">✓ บันทึกทับไฟล์เดิมแล้ว</div>`;
+                    } else {
+                        detailsHtml += `<div class="replacement-detail new-file-info">ไฟล์ใหม่: ${fileResult.new_file}</div>`;
+                    }
                 }
             } else {
                 detailsHtml = `<div class="replacement-detail">ข้อผิดพลาด: ${fileResult.error}</div>`;
             }
-            
+
             return `
                 <div class="result-item ${statusClass}">
                     <div class="result-file">${fileResult.file}</div>
@@ -432,7 +496,7 @@ class TextReplacerApp {
 
         container.innerHTML = resultsHtml;
         resultsSection.classList.remove('hidden');
-        
+
         // Scroll to results
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -441,7 +505,7 @@ class TextReplacerApp {
         // Simple error display - you could enhance this with a proper modal
         const resultsSection = document.getElementById('resultsSection');
         const container = document.getElementById('resultsContainer');
-        
+
         container.innerHTML = `
             <div class="result-item error">
                 <div class="result-file">ข้อผิดพลาด</div>
@@ -736,20 +800,20 @@ class TextReplacerApp {
 
         this.showInputDialog('ชื่อใหม่:', this.currentProfile, (newName) => {
             if (newName && newName.trim() && newName.trim() !== this.currentProfile) {
-            const name = newName.trim();
+                const name = newName.trim();
 
-            if (this.profiles[name]) {
-                alert('ชื่อโปรไฟล์นี้มีอยู่แล้ว');
-                return;
-            }
+                if (this.profiles[name]) {
+                    alert('ชื่อโปรไฟล์นี้มีอยู่แล้ว');
+                    return;
+                }
 
-            // Rename profile
-            this.profiles[name] = this.profiles[this.currentProfile];
-            delete this.profiles[this.currentProfile];
-            this.currentProfile = name;
+                // Rename profile
+                this.profiles[name] = this.profiles[this.currentProfile];
+                delete this.profiles[this.currentProfile];
+                this.currentProfile = name;
 
-            this.updateProfileButtons();
-            this.saveSettings();
+                this.updateProfileButtons();
+                this.saveSettings();
             }
         });
     }

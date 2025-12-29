@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Replacer</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <header class="header">
@@ -38,136 +40,168 @@
             <!-- File Mode Content -->
             <div id="file-mode" class="tab-content active">
                 <!-- Profile Selection Section -->
-            <section class="section profile-section">
-                <h2>โปรไฟล์คำแทนที่</h2>
-                <div class="profile-controls">
-                    <div id="profileButtons" class="profile-button-list">
-                        <button class="profile-btn active" data-profile="default">โปรไฟล์หลัก</button>
-                    </div>
-                    <div class="profile-management">
-                        <button id="newProfileBtn" class="btn btn-secondary">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            เพิ่ม
-                        </button>
-                        <button id="renameProfileBtn" class="btn btn-secondary">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                            </svg>
-                            แก้ไข
-                        </button>
-                        <button id="deleteProfileBtn" class="btn btn-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="3,6 5,6 21,6"></polyline>
-                                <path d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2"></path>
-                            </svg>
-                        </button>
-                        <button id="exportPresetBtn" class="btn btn-secondary">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7,10 12,15 17,10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                            Export
-                        </button>
-                        <button id="importPresetBtn" class="btn btn-secondary">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="17,8 12,3 7,8"></polyline>
-                                <line x1="12" y1="3" x2="12" y2="15"></line>
-                            </svg>
-                            Import
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- File Selection Section -->
-            <section class="section">
-                <h2>เลือกไฟล์</h2>
-                <div class="file-selector">
-                    <button id="selectFilesBtn" class="btn btn-primary">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14,2 14,8 20,8"></polyline>
-                        </svg>
-                        เลือกไฟล์ .txt
-                    </button>
-                    <div id="selectedFiles" class="selected-files"></div>
-                </div>
-            </section>
-
-            <!-- Word Replacement Section -->
-            <section class="section">
-                <div class="rules-container">
-                    <!-- Replace Words Section -->
-                    <div class="rule-section">
-                        <h3>แทนที่คำ</h3>
-                        <div class="compact-rules">
-                            <div class="rule-header">
-                                <span>คำเดิม</span>
-                                <span>คำใหม่</span>
-                                <span></span>
-                            </div>
-                            <div id="replaceList" class="rule-list">
-                                <!-- Replace rules will be added here -->
-                            </div>
-                            <button id="addReplaceBtn" class="btn-compact">+ เพิ่มกฎแทนที่</button>
+                <section class="section profile-section">
+                    <h2>โปรไฟล์คำแทนที่</h2>
+                    <div class="profile-controls">
+                        <div id="profileButtons" class="profile-button-list">
+                            <button class="profile-btn active" data-profile="default">โปรไฟล์หลัก</button>
+                        </div>
+                        <div class="profile-management">
+                            <button id="newProfileBtn" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                เพิ่ม
+                            </button>
+                            <button id="renameProfileBtn" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                แก้ไข
+                            </button>
+                            <button id="deleteProfileBtn" class="btn btn-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="3,6 5,6 21,6"></polyline>
+                                    <path
+                                        d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2">
+                                    </path>
+                                </svg>
+                            </button>
+                            <button id="exportPresetBtn" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7,10 12,15 17,10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Export
+                            </button>
+                            <button id="importPresetBtn" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17,8 12,3 7,8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                Import
+                            </button>
                         </div>
                     </div>
+                </section>
 
-                    <!-- Delete Words Section -->
-                    <div class="rule-section">
-                        <h3>ลบคำ</h3>
-                        <div class="compact-rules">
-                            <div class="rule-header">
-                                <span>คำที่จะลบ</span>
-                                <span></span>
+                <!-- File Selection Section -->
+                <section class="section">
+                    <h2>เลือกไฟล์</h2>
+                    <div class="file-selector">
+                        <div class="file-selector-buttons">
+                            <button id="selectFilesBtn" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14,2 14,8 20,8"></polyline>
+                                </svg>
+                                เลือกไฟล์ .txt
+                            </button>
+                            <button id="selectFoldersBtn" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z">
+                                    </path>
+                                </svg>
+                                เลือกหลายโฟลเดอร์
+                            </button>
+                        </div>
+                        <div id="selectedFolders" class="selected-folders"></div>
+                        <div id="selectedFiles" class="selected-files"></div>
+                    </div>
+                </section>
+
+                <!-- Word Replacement Section -->
+                <section class="section">
+                    <div class="rules-container">
+                        <!-- Replace Words Section -->
+                        <div class="rule-section">
+                            <h3>แทนที่คำ</h3>
+                            <div class="compact-rules">
+                                <div class="rule-header">
+                                    <span>คำเดิม</span>
+                                    <span>คำใหม่</span>
+                                    <span></span>
+                                </div>
+                                <div id="replaceList" class="rule-list">
+                                    <!-- Replace rules will be added here -->
+                                </div>
+                                <button id="addReplaceBtn" class="btn-compact">+ เพิ่มกฎแทนที่</button>
                             </div>
-                            <div id="deleteList" class="rule-list">
-                                <!-- Delete rules will be added here -->
+                        </div>
+
+                        <!-- Delete Words Section -->
+                        <div class="rule-section">
+                            <h3>ลบคำ</h3>
+                            <div class="compact-rules">
+                                <div class="rule-header">
+                                    <span>คำที่จะลบ</span>
+                                    <span></span>
+                                </div>
+                                <div id="deleteList" class="rule-list">
+                                    <!-- Delete rules will be added here -->
+                                </div>
+                                <button id="addDeleteBtn" class="btn-compact">+ เพิ่มคำลบ</button>
                             </div>
-                            <button id="addDeleteBtn" class="btn-compact">+ เพิ่มคำลบ</button>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Process Section -->
-            <section class="section">
-                <div class="process-container">
-                    <div class="process-buttons">
-                        <button id="processReplaceBtn" class="btn btn-primary" disabled>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                            </svg>
-                            ดำเนินการแทนที่
-                        </button>
-                        <button id="processDeleteBtn" class="btn btn-danger" disabled>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="3,6 5,6 21,6"></polyline>
-                                <path d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                            ดำเนินการลบคำ
-                        </button>
-                        <button id="processAllBtn" class="btn btn-success" disabled>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="20,6 9,17 4,12"></polyline>
-                            </svg>
-                            ดำเนินการทั้งหมด
-                        </button>
+                <!-- Process Section -->
+                <section class="section">
+                    <div class="process-container">
+                        <div class="overwrite-option">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="overwriteOriginal">
+                                <span class="checkbox-text">บันทึกทับไฟล์เดิม</span>
+                                <span class="checkbox-hint">(ถ้าไม่เลือก จะสร้างไฟล์ใหม่ในโฟลเดอร์ edited_files)</span>
+                            </label>
+                        </div>
+                        <div class="process-buttons">
+                            <button id="processReplaceBtn" class="btn btn-primary" disabled>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                </svg>
+                                ดำเนินการแทนที่
+                            </button>
+                            <button id="processDeleteBtn" class="btn btn-danger" disabled>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="3,6 5,6 21,6"></polyline>
+                                    <path
+                                        d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2">
+                                    </path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                                ดำเนินการลบคำ
+                            </button>
+                            <button id="processAllBtn" class="btn btn-success" disabled>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="20,6 9,17 4,12"></polyline>
+                                </svg>
+                                ดำเนินการทั้งหมด
+                            </button>
+                        </div>
+                        <div id="processingIndicator" class="processing-indicator hidden">
+                            <div class="spinner"></div>
+                            <span>กำลังดำเนินการ...</span>
+                        </div>
                     </div>
-                    <div id="processingIndicator" class="processing-indicator hidden">
-                        <div class="spinner"></div>
-                        <span>กำลังดำเนินการ...</span>
-                    </div>
-                </div>
-            </section>
+                </section>
 
                 <!-- Results Section -->
                 <section id="resultsSection" class="section hidden">
@@ -187,27 +221,33 @@
                         </div>
                         <div class="profile-management">
                             <button id="textNewProfileBtn" class="btn btn-secondary">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <line x1="12" y1="5" x2="12" y2="19"></line>
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                 </svg>
                                 เพิ่ม
                             </button>
                             <button id="textRenameProfileBtn" class="btn btn-secondary">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                     <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                 </svg>
                                 แก้ไข
                             </button>
                             <button id="textDeleteProfileBtn" class="btn btn-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <polyline points="3,6 5,6 21,6"></polyline>
-                                    <path d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2,2h4a2,2 0 0,1,2,2v2"></path>
+                                    <path
+                                        d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2,2h4a2,2 0 0,1,2,2v2">
+                                    </path>
                                 </svg>
                             </button>
                             <button id="textExportPresetBtn" class="btn btn-secondary">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                     <polyline points="7,10 12,15 17,10"></polyline>
                                     <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -215,7 +255,8 @@
                                 Export
                             </button>
                             <button id="textImportPresetBtn" class="btn btn-secondary">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                     <polyline points="17,8 12,3 7,8"></polyline>
                                     <line x1="12" y1="3" x2="12" y2="15"></line>
@@ -234,29 +275,35 @@
                         <!-- Input Area -->
                         <div class="text-input-area">
                             <label class="input-label">ข้อความต้นฉบับ:</label>
-                            <textarea id="inputText" placeholder="วางข้อความที่ต้องการแก้ไขที่นี่..." class="text-area"></textarea>
+                            <textarea id="inputText" placeholder="วางข้อความที่ต้องการแก้ไขที่นี่..."
+                                class="text-area"></textarea>
                         </div>
 
                         <!-- Convert Buttons -->
                         <div class="text-controls">
                             <div class="text-convert-buttons">
                                 <button id="convertReplaceBtn" class="btn btn-primary">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
                                         <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                                     </svg>
                                     แทนที่คำ
                                 </button>
                                 <button id="convertDeleteBtn" class="btn btn-danger">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
                                         <polyline points="3,6 5,6 21,6"></polyline>
-                                        <path d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2"></path>
+                                        <path
+                                            d="m19,6v14a2,2 0 0,1-2,2H7a2,2 0 0,1-2-2V6m3,0V4a2,2 0 0,1,2-2h4a2,2 0 0,1,2,2v2">
+                                        </path>
                                         <line x1="10" y1="11" x2="10" y2="17"></line>
                                         <line x1="14" y1="11" x2="14" y2="17"></line>
                                     </svg>
                                     ลบคำ
                                 </button>
                                 <button id="convertAllBtn" class="btn btn-success">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
                                         <polyline points="20,6 9,17 4,12"></polyline>
                                     </svg>
                                     ทั้งหมด
@@ -264,15 +311,18 @@
                             </div>
                             <div class="text-action-buttons">
                                 <button id="copyOutputBtn" class="btn btn-secondary" disabled>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
                                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                                     </svg>
                                     คัดลอก
                                 </button>
                                 <button id="saveTextBtn" class="btn btn-success" disabled>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z">
+                                        </path>
                                         <polyline points="17,21 17,13 7,13 7,21"></polyline>
                                         <polyline points="7,3 7,8 15,8"></polyline>
                                     </svg>
@@ -284,7 +334,8 @@
                         <!-- Output Area -->
                         <div class="text-output-area">
                             <label class="input-label">ข้อความที่แก้แล้ว:</label>
-                            <textarea id="outputText" placeholder="ข้อความที่แก้แล้วจะแสดงที่นี่..." class="text-area" readonly></textarea>
+                            <textarea id="outputText" placeholder="ข้อความที่แก้แล้วจะแสดงที่นี่..." class="text-area"
+                                readonly></textarea>
                         </div>
                     </div>
                 </section>
@@ -294,4 +345,5 @@
 
     <script src="renderer.js"></script>
 </body>
+
 </html>
